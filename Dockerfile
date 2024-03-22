@@ -1,10 +1,14 @@
 FROM ubuntu:latest
-RUN apt update
-RUN apt install -y python3
-RUN apt install -y python3-pip
+RUN apt update && apt install -y python3 && apt install -y python3-pip && apt install -y nginx && apt install -y supervisor
 WORKDIR /app
+RUN mkdir app
+RUN rm -rf /etc/nginx/sites-enabled/*
+COPY nginx.conf /etc/nginx/sites-enabled/
 COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY app .
+COPY app ./app
+COPY supervisord.conf .
+RUN pip install -r --no-cache-dir requirements.txt
 EXPOSE 80
-CMD uvicorn app.main:app --host 0.0.0.0 --port 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3\
+    CMD curl -f http://localhost:80/ || exit 1
+CMD supervisord -c supervisord.conf
