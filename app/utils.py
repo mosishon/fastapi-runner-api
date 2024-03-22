@@ -1,5 +1,6 @@
 from datetime import UTC, datetime, timedelta
 
+import httpx
 import jwt
 from passlib.context import CryptContext
 
@@ -39,3 +40,25 @@ def get_ip_from_token(token: str) -> str:
         return dec.get("ip")
     except:
         return ""
+
+
+async def http_get_request(url: str, params: dict | None = None, headers: dict | None = None):
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, params=params, headers=headers)
+            response.raise_for_status()  # Raise an exception for non-2xx status codes
+            return response.json()
+        except httpx.HTTPError as exc:
+            # Handle HTTP errors here
+            raise exc
+
+
+async def http_post_request(url: str, data: dict, files: dict | None = None, headers: dict | None = None):
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(url, data=data, files=files, headers=headers)
+            response.raise_for_status()  # Raise an exception for non-2xx status codes
+            return response.json()
+        except httpx.HTTPError as exc:
+            # Handle HTTP errors here
+            raise exc

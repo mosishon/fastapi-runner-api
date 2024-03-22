@@ -1,0 +1,8 @@
+fastapi
+pre-commit
+uvicorn
+passlib[bcrypt]
+pyjwt
+redis
+mypy
+httpx

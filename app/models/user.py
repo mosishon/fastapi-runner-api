@@ -9,3 +9,7 @@ class User(BaseModel):
 
     def to_dict(self):
         return {"name": self.name, "username": self.username, "password": self.password}
+
+
+class RunArguments(BaseModel):
+    language: str
