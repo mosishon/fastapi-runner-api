@@ -28,6 +28,8 @@ async def is_admin(request: Request) -> Token | None:
 
 
 async def is_user_logged_in(request: Request):
+    print(request.url_for("users_login"))
+    print(request.url)
     if request.url_for("users_login") != request.url:
         token = await oauthـuser(request)
         if token is None:

@@ -1,3 +1,6 @@
+from typing import Annotated
+
+from fastapi import Form
 from pydantic import BaseModel
 
 
@@ -11,5 +14,6 @@ class User(BaseModel):
         return {"name": self.name, "username": self.username, "password": self.password}
 
 
-class RunArguments(BaseModel):
-    language: str
+class UserLogin(BaseModel):
+    username: str
+    password: str

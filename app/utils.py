@@ -1,7 +1,13 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 
+try:
+    from datetime import UTC
+except ImportError:
+    from datetime import timezone
+    UTC = timezone.utc
 import httpx
 import jwt
+from fastapi import Request
 from passlib.context import CryptContext
 
 SECRET_KEY = "SECRET"
@@ -46,7 +52,7 @@ async def http_get_request(url: str, params: dict | None = None, headers: dict |
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(url, params=params, headers=headers)
-            response.raise_for_status()  # Raise an exception for non-2xx status codes
+            # response.raise_for_status()  # Raise an exception for non-2xx status codes
             return response.json()
         except httpx.HTTPError as exc:
             # Handle HTTP errors here
@@ -57,8 +63,12 @@ async def http_post_request(url: str, data: dict, files: dict | None = None, hea
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(url, data=data, files=files, headers=headers)
-            response.raise_for_status()  # Raise an exception for non-2xx status codes
+            # response.raise_for_status()  # Raise an exception for non-2xx status codes
             return response.json()
         except httpx.HTTPError as exc:
             # Handle HTTP errors here
             raise exc
+
+
+async def get_ip(request: Request) -> str:
+    return request.headers.get("x-forwarded-for", request.client.host)
