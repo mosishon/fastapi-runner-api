@@ -17,7 +17,6 @@ async def is_admin(request: Request) -> Token | None:
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credential.")
         admin = get_uid_from_token(token)
         ip = get_ip_from_token(token)
-        print(f"Token ip:{ip} - request ip:{request.client.host}")
         if ip != request.client.host:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Ip Changed login again")
@@ -28,8 +27,6 @@ async def is_admin(request: Request) -> Token | None:
 
 
 async def is_user_logged_in(request: Request):
-    print(request.url_for("users_login"))
-    print(request.url)
     if request.url_for("users_login") != request.url:
         token = await oauthـuser(request)
         if token is None:
@@ -37,7 +34,6 @@ async def is_user_logged_in(request: Request):
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credential.")
         user = get_uid_from_token(token)
         ip = get_ip_from_token(token)
-        print(f"Token ip:{ip} - request ip:{request.client.host}")
         if ip != request.client.host:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Ip Changed login again")
