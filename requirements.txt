@@ -6,3 +6,4 @@ pyjwt
 redis
 mypy
 httpx
+python-multipart
