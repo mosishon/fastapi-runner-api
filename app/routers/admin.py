@@ -23,11 +23,7 @@ async def admin_login(user: AdminLogin, request: Request):
 
 
 @router.post("/new-user")
-async def new_user(user: User, token: Token = Depends(is_admin)):
-    if not token:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    print(token)
+async def new_user(user: User):
     try:
         user_dict = await create_user(user)
     except UserAlreadyExists:
