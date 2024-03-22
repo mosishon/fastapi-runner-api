@@ -7,7 +7,7 @@ COPY nginx.conf /etc/nginx/sites-enabled/
 COPY requirements.txt .
 COPY app ./app
 COPY supervisord.conf .
-RUN pip install -r --no-cache-dir requirements.txt
+RUN pip install --no-cache-dir -r  requirements.txt
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3\
     CMD curl -f http://localhost:80/ || exit 1
